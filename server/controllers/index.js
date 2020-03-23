@@ -1,5 +1,4 @@
-const { Country } = require('../models/')
-const { User } = require('../models/')
+const { Country, User, Report } = require('../models/')
 const decode = require('../helpers/decode')
 let jwt = require('jsonwebtoken');
 
@@ -31,7 +30,6 @@ class Controller {
         }
       })
       .catch(err => {
-        console.log(err)
         next(err)
       })
   }
@@ -41,10 +39,34 @@ class Controller {
       .then(data => {
         res.status(200).json(data)
       })
+      .catch(err => {
+        next(err)
+      })
   }
 
   static getReports(req, res, next) {
-    let UserId = Number(req.body.id)
+    let token = req.headers.usertoken
+    let UserId = null
+    try{
+      let decoded = jwt.verify(token, 'gogog')
+      UserId = decoded.id
+    }catch(err){
+      next({
+        status:401,
+        message: 'Unauthentication'
+      })
+    }
+    Report.findAll({
+      where: {
+        UserId
+      }   
+    })
+      .then(data => {
+        res.status(200).json(data)
+      })
+      .catch(err => {
+        next(err)
+      })
   }
 
   static addReport(req, res, next) {
@@ -53,7 +75,10 @@ class Controller {
     let { report, CountryId } = req.body
   }
 
-
+  static deleteReport(req, res, next) {
+    let userData = decode(req.headers.usertoken)
+    let UserId = userData.id
+  }
 }
 
 module.exports = Controller
