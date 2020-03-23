@@ -1,5 +1,6 @@
 const { Country } = require('../models/')
 const { User } = require('../models/')
+const decode = require('../helpers/decode')
 let jwt = require('jsonwebtoken');
 
 class Controller {
