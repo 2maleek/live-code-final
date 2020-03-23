@@ -1,5 +1,4 @@
 const { Country, User, Report } = require('../models/')
-const decode = require('../helpers/decode')
 let jwt = require('jsonwebtoken');
 
 class Controller {
@@ -70,14 +69,38 @@ class Controller {
   }
 
   static addReport(req, res, next) {
-    let userData = decode(req.headers.usertoken)
-    let UserId = userData.id
+    let UserId = null
     let { report, CountryId } = req.body
+    try{
+      let decoded = jwt.verify(token, 'gogog')
+      UserId = decoded.id
+    }catch(err){
+      next({
+        status:401,
+        message: 'Unauthentication'
+      })
+    }
+    Report.create({
+      report,
+      CountryId,
+      UserId
+    })
+      .then(data => {
+        res.status(201).json(data)
+      })
   }
 
   static deleteReport(req, res, next) {
-    let userData = decode(req.headers.usertoken)
-    let UserId = userData.id
+    let UserId = null
+    try{
+      let decoded = jwt.verify(token, 'gogog')
+      UserId = decoded.id
+    }catch(err){
+      next({
+        status:401,
+        message: 'Unauthentication'
+      })
+    }
   }
 }
 
