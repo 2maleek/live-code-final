@@ -8,5 +8,6 @@ router.get('/', (req, res) => {
 
 router.post('/login', Controller.login)
 router.get('/countries', authentication, Controller.getCountries)
-router.get('/reports', Controller.getReports)
+router.get('/reports', authentication, Controller.getReports)
+router.post('/reports', authentication, Controller.addReport)
 module.exports = router

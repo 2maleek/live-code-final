@@ -69,25 +69,30 @@ class Controller {
   }
 
   static addReport(req, res, next) {
+    let token = req.headers.usertoken
     let UserId = null
+    let cases = null
+    let id = null
     let { report, CountryId } = req.body
     try{
       let decoded = jwt.verify(token, 'gogog')
-      UserId = decoded.id
+      res.send(decoded["id"])
     }catch(err){
       next({
         status:401,
         message: 'Unauthentication'
       })
     }
-    Report.create({
-      report,
-      CountryId,
-      UserId
-    })
-      .then(data => {
-        res.status(201).json(data)
-      })
+    // Report.create({
+    //   report,
+    //   CountryId,
+    //   UserId
+    // })
+    //   .then(data => {
+    //     id = data.id
+    //     res.status(200).json(data)
+    //     // return Country.findByPk(CountryId)
+    //   })
   }
 
   static deleteReport(req, res, next) {
