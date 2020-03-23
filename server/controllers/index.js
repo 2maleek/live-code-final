@@ -1,13 +1,12 @@
-const Country = require('../models/country')
-const User = require('../models/user')
+const { Country } = require('../models/')
+const { User } = require('../models/')
 let jwt = require('jsonwebtoken');
 
 class Controller {
   static login(req, res, next){
     let username = req.body.username
     let password = req.body.password
-
-    res.send(password)
+    
     User.findOne({
       where: {
         username
@@ -20,12 +19,12 @@ class Controller {
               id: data.id,
               name: data.name,
               username: username
-            }, process.env.SECRET, { expiresIn: 60 * 60 })
+            }, 'gogog', { expiresIn: 60 * 60 })
             res.type('application/json')
             res.status(200).json({token, id: data.id, username})
           }else{
             next({status:400, message: "Wrong email or password!"})
-          }
+          }          
         }else{
           next({status:400, message: "Username not found!"})
         }
@@ -42,6 +41,18 @@ class Controller {
         res.status(200).json(data)
       })
   }
+
+  static getReports(req, res, next) {
+    let UserId = Number(req.body.id)
+  }
+
+  static addReport(req, res, next) {
+    let userData = decode(req.headers.usertoken)
+    let UserId = userData.id
+    let { report, CountryId } = req.body
+  }
+
+
 }
 
 module.exports = Controller

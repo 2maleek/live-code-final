@@ -6,5 +6,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/login', Controller.login)
-
+router.get('/countries', Controller.getCountries)
+// router.get('/reports', Controller.getReports)
 module.exports = router
