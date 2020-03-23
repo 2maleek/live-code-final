@@ -7,6 +7,7 @@ class Controller {
     let username = req.body.username
     let password = req.body.password
 
+    res.send(password)
     User.findOne({
       where: {
         username
@@ -30,11 +31,17 @@ class Controller {
         }
       })
       .catch(err => {
+        console.log(err)
         next(err)
       })
   }
 
-  static
+  static getCountries(req, res, next) {
+    Country.findAll()
+      .then(data => {
+        res.status(200).json(data)
+      })
+  }
 }
 
 module.exports = Controller
